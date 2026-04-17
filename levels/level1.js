@@ -3,6 +3,7 @@ const level1 = new Level(
         new Fish(),
         new Fish(),
         new Fish(),
+        new Endboss()
     ],
     [
         new Light("img/3. Background/Layers/1. Light/1.png"),
