@@ -1,12 +1,12 @@
 class Level{
-    enemys;
+    enemies;
     lights;
     backgroundObjects;
-    level_end_x = 2200;
-    level_end_y = 300;
+    levelEndX = 2200;
+    levelEndY = 300;
 
-    constructor(enemys, lights, backgroundObjects) {
-        this.enemys = enemys;
+    constructor(enemies, lights, backgroundObjects) {
+        this.enemies = enemies;
         this.lights = lights;
         this.backgroundObjects = backgroundObjects;
     }   

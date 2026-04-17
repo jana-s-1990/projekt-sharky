@@ -1,4 +1,11 @@
-class Character extends MovableObject{
+class Character extends MovableObject {
+    MOVEMENT_FRAME_TIME = 1000 / 60;
+    ANIMATION_FRAME_TIME = 100;
+    MAX_VERTICAL_SPEED = 5;
+    TILT_THRESHOLD = 0.2;
+    TILT_ANGLE = 0.2;
+    CAMERA_OFFSET_X = 50;
+
     height = 180;
     width = 180;
 
@@ -23,7 +30,7 @@ class Character extends MovableObject{
             "img/1.Sharkie/1.IDLE/18.png",
     ];
 
-    IMAGES_SWIMM = [
+    IMAGES_SWIMMING = [
             "img/1.Sharkie/3.Swim/1.png",
             "img/1.Sharkie/3.Swim/2.png",
             "img/1.Sharkie/3.Swim/3.png",
@@ -31,72 +38,136 @@ class Character extends MovableObject{
             "img/1.Sharkie/3.Swim/5.png",
             "img/1.Sharkie/3.Swim/6.png",  
     ];
+
+    IMAGES_DEAD = [
+            "img/1.Sharkie/6.dead/1.Poisoned/1.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/2.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/3.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/4.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/5.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/6.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/7.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/8.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/9.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/10.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/11.png",
+            "img/1.Sharkie/6.dead/1.Poisoned/12.png",
+    ];
+
+    IMAGES_HURT = [
+            "img/1.Sharkie/5.Hurt/1.Poisoned/1.png",
+            "img/1.Sharkie/5.Hurt/1.Poisoned/2.png",
+            "img/1.Sharkie/5.Hurt/1.Poisoned/3.png",
+            "img/1.Sharkie/5.Hurt/1.Poisoned/4.png",
+            "img/1.Sharkie/5.Hurt/1.Poisoned/5.png",
+    ]
+
     world;
     speed = 10;
     tiltAngle = 0;
 
+    offset = {
+        top: 90,
+        right:35,
+        bottom: 40,
+        left: 35
+    };
+
     constructor() {
         super().loadImage("img/1.Sharkie/1.IDLE/1.png");
         this.loadImages(this.IMAGES_IDLE);
-        this.loadImages(this.IMAGES_SWIMM);
-        this.animate();
+        this.loadImages(this.IMAGES_SWIMMING);
+        this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_DEAD);
     }
 
-    animate() {
-       
+    startAnimation() {
         setInterval(() => {
-            if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x){
-                this.x += this.speed;
-                this.otherDirection = false;
-            }
-
-            if(this.world.keyboard.LEFT && this.x > 0){
-                this.x -= this.speed;
-                this.otherDirection = true;
-            }
-
-            if (this.world.keyboard.UP) {
-                this.speedY -= this.swimmAcceleration;
-            }
-
-            if (this.world.keyboard.DOWN) {
-                this.speedY += this.swimmAcceleration;
-            }
-
-            this.speedY *= this.waterDrag;
-            this.speedY = Math.max(-5, Math.min(5, this.speedY));
-            this.y += this.speedY;
-            this.y = Math.max(0, Math.min(this.world.level.level_end_y, this.y));
-
-            if (this.y === 0 || this.y === this.world.level.level_end_y) {
-                this.speedY = 0;
-            }
-
-            this.setTiltAngle();
-
-            this.world.camera_x = -this.x  + 50;
-        }, 1000/60);
+            this.updateMovement();
+        }, this.MOVEMENT_FRAME_TIME);
 
         setInterval(() => {
-            if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN){
-                this.playAnnimation(this.IMAGES_SWIMM);
-            } else {
-                this.playAnnimation(this.IMAGES_IDLE);
-            }
-        }, 100);
+            this.updateAnimation();
+        }, this.ANIMATION_FRAME_TIME);
     }
 
-    setTiltAngle(){
-        if (this.speedY < -0.2) {
-            this.tiltAngle = -0.2;
-        } else if (this.speedY > 0.2) {
-            this.tiltAngle = 0.2;
+    updateMovement() {
+        this.handleHorizontalMovement();
+        this.handleVerticalMovement();
+        this.updateTiltAngle();
+        this.updateCameraPosition();
+    }
+
+    handleHorizontalMovement() {
+        if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
+            this.x += this.speed;
+            this.otherDirection = false;
+        }
+
+        if (this.world.keyboard.LEFT && this.x > 0) {
+            this.x -= this.speed;
+            this.otherDirection = true;
+        }
+    }
+
+    handleVerticalMovement() {
+        if (this.world.keyboard.UP) {
+            this.speedY -= this.swimAcceleration;
+        }
+
+        if (this.world.keyboard.DOWN) {
+            this.speedY += this.swimAcceleration;
+        }
+
+        this.speedY *= this.waterDrag;
+        this.speedY = Math.max(-this.MAX_VERTICAL_SPEED, Math.min(this.MAX_VERTICAL_SPEED, this.speedY));
+        this.y += this.speedY;
+        this.limitVerticalPosition();
+    }
+
+    limitVerticalPosition() {
+        this.y = Math.max(0, Math.min(this.world.level.levelEndY, this.y));
+
+        if (this.y === 0 || this.y === this.world.level.levelEndY) {
+            this.speedY = 0;
+        }
+    }
+
+    updateAnimation() {
+        if (this.isMoving()) {
+            this.playAnimation(this.IMAGES_SWIMMING);
+            return;
+        }
+        if (this.isHurt()) {
+            this.playAnimation(this.IMAGES_HURT);
+            return;
+        }  
+        if (this.isDead()){
+            this.playAnimation(this.IMAGES_DEAD);
+            return;
+        }
+
+        this.playAnimation(this.IMAGES_IDLE);
+    }
+
+    isMoving() {
+        return this.world.keyboard.RIGHT ||
+            this.world.keyboard.LEFT ||
+            this.world.keyboard.UP ||
+            this.world.keyboard.DOWN;
+    }
+
+    updateTiltAngle() {
+        if (this.speedY < -this.TILT_THRESHOLD) {
+            this.tiltAngle = -this.TILT_ANGLE;
+        } else if (this.speedY > this.TILT_THRESHOLD) {
+            this.tiltAngle = this.TILT_ANGLE;
         } else {
             this.tiltAngle = 0;
         }
     }
 
-    jump(){
-
+    updateCameraPosition() {
+        this.world.cameraX = -this.x + this.CAMERA_OFFSET_X;
     }
 }

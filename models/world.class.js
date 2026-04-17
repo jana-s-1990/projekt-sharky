@@ -1,53 +1,69 @@
-class World{
+class World {
     character = new Character();
     level = level1;
     canvas;
     keyboard;
     ctx;
-    camera_x = 0;
+    cameraX = 0;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.setCharacterWorld();
         this.draw();
-        this.setWorld();
+        this.checkCollisions();
     }
 
-    setWorld(){
+    setCharacterWorld() {
         this.character.world = this;
+        this.character.startAnimation();
     }
 
-    draw(){
+    checkCollisions(){
+        setInterval(() => {
+            this.level.enemies.forEach((enemy) => {
+                if(this.character.isColliding(enemy)){
+                    this.character.hit();
+                    console.log("Collision with enemy, energy: " + this.character.energy);
+                }
+            });
+            
+        }, 1000);
+    }
+
+    draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.lights);
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemys);
-        this.ctx.translate(-this.camera_x, 0);
+        this.ctx.translate(this.cameraX, 0);
+        this.drawObjects(this.level.backgroundObjects);
+        this.drawObjects(this.level.lights);
+        this.drawObject(this.character);
+        this.drawObjects(this.level.enemies);
+        this.ctx.translate(-this.cameraX, 0);
         requestAnimationFrame(() => this.draw());
-
     }
-    addToMap(object){
+
+    drawObject(object) {
         this.ctx.save();
         this.ctx.translate(object.x + object.width / 2, object.y + object.height / 2);
 
-        if(object.otherDirection){
+        if (object.otherDirection) {
             this.ctx.scale(-1, 1);
         }
 
-        if(object.tiltAngle){
+        if (object.tiltAngle) {
             this.ctx.rotate(object.tiltAngle);
         }
-
-        this.ctx.drawImage(object.img, -object.width / 2, -object.height / 2, object.width, object.height);
+        object.draw(this.ctx);
+        object.drawFrame(this.ctx);
+        
+        this.ctx.stroke();
         this.ctx.restore();
     }
 
-    addObjectsToMap(objects){
+    drawObjects(objects) {
         objects.forEach(object => {
-            this.addToMap(object);
-        }); 
+            this.drawObject(object);
+        });
     }
 }

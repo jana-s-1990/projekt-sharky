@@ -10,6 +10,6 @@ class Light extends MovableObject {
     }
 
     animate() {
-        this.moveLeft();          
+        this.startMovingLeft();          
     }   
 }
