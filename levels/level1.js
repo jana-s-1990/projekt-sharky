@@ -6,7 +6,7 @@ const level1 = new Level(
         new Endboss()
     ],
     [
-        new Light("img/3. Background/Layers/1. Light/1.png"),
+        new Light("img/3. Background/Layers/1. Light/1.png")
     ],
     [
         new BackgroundObject("img/3. Background/Layers/5. Water/D2.png", 480, -719),

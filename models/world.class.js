@@ -30,19 +30,19 @@ class World{
 
     }
     addToMap(object){
+        this.ctx.save();
+        this.ctx.translate(object.x + object.width / 2, object.y + object.height / 2);
+
         if(object.otherDirection){
-            this.ctx.save();
-            this.ctx.translate(object.width, 0);
             this.ctx.scale(-1, 1);
-            object.x = object.x * -1;
         }
 
-        this.ctx.drawImage(object.img, object.x, object.y, object.width, object.height);
-
-        if(object.otherDirection){
-            object.x = object.x * -1;
-            this.ctx.restore();
+        if(object.tiltAngle){
+            this.ctx.rotate(object.tiltAngle);
         }
+
+        this.ctx.drawImage(object.img, -object.width / 2, -object.height / 2, object.width, object.height);
+        this.ctx.restore();
     }
 
     addObjectsToMap(objects){

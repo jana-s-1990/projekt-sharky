@@ -8,6 +8,9 @@ class MovableObject {
     imageCache = {};
     currentImage = 0;
     otherDirection = false;
+    speedY = 0;
+    swimmAcceleration = 0.4;
+    waterDrag = 0.9;
 
     loadImage(path) {
         this.img = new Image();
@@ -38,4 +41,16 @@ class MovableObject {
             this.x -= this.speed;
         }, 1000 / 60);
     }
+
+    // applyGravity(){
+    //     setInterval(() => {
+    //         if(this.isAboveGround() ||this.speedY > 0){
+    //             this.y -= this.speedY;
+    //             this.speedY -= this.acceleration;
+    //         }
+    //     }, 1000/25);
+    // }
+    // isAboveGround(){
+    //     return this.y < 230;
+    // }
 }
