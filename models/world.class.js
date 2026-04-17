@@ -5,6 +5,7 @@ class World {
     keyboard;
     ctx;
     cameraX = 0;
+    statusBar = new StatusBar();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
@@ -25,7 +26,7 @@ class World {
             this.level.enemies.forEach((enemy) => {
                 if(this.character.isColliding(enemy)){
                     this.character.hit();
-                    console.log("Collision with enemy, energy: " + this.character.energy);
+                    this.statusBar.setPercentage(this.character.energy);
                 }
             });
             
@@ -40,6 +41,9 @@ class World {
         this.drawObject(this.character);
         this.drawObjects(this.level.enemies);
         this.ctx.translate(-this.cameraX, 0);
+
+        this.drawObject(this.statusBar);
+
         requestAnimationFrame(() => this.draw());
     }
 
