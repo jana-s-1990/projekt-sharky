@@ -4,4 +4,6 @@ class Keyboard{
     UP;
     DOWN;
     SPACE;
+
+    lastKeyPress = Date.now();
 }

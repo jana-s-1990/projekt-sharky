@@ -5,7 +5,9 @@ class World {
     keyboard;
     ctx;
     cameraX = 0;
-    statusBar = new StatusBar();
+    lifeBar = new StatusBar(StatusBar.LIFE_IMAGES, 10, 10, 180, 50, 100);
+    coinBar = new StatusBar(StatusBar.COIN_IMAGES, 10, 50, 180, 48, 0);
+    poisonBar = new StatusBar(StatusBar.POISON_IMAGES, 10, 90, 180, 50, 0);
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext("2d");
@@ -13,7 +15,7 @@ class World {
         this.keyboard = keyboard;
         this.setCharacterWorld();
         this.draw();
-        this.checkCollisions();
+        this.run();
     }
 
     setCharacterWorld() {
@@ -21,16 +23,52 @@ class World {
         this.character.startAnimation();
     }
 
-    checkCollisions(){
+    run() {
+        this.checkEnemyCollisions();
+        this.checkCollectibleCollisions();
+    }
+
+    checkEnemyCollisions(){
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
                 if(this.character.isColliding(enemy)){
                     this.character.hit();
-                    this.statusBar.setPercentage(this.character.energy);
+                    this.lifeBar.setPercentage(this.character.energy);
                 }
             });
             
-        }, 1000);
+        }, 100);
+    }
+
+    checkCollectibleCollisions() {
+        setInterval(() => {
+            this.collectCoins();
+            this.collectPoisonBottles();
+        }, 100);
+    }
+
+    collectCoins() {
+        this.level.coins = this.level.coins.filter((coin) => {
+            if (!this.character.isColliding(coin)) {
+                return true;
+            }
+
+            this.character.coins = Math.min(100, this.character.coins + 10);
+            this.coinBar.setPercentage(this.character.coins);
+            return false;
+        });
+    }
+
+    collectPoisonBottles() {
+        this.level.poisonBottles = this.level.poisonBottles.filter((poisonBottle) => {
+            if (!this.character.isColliding(poisonBottle)) {
+                return true;
+            }
+
+            this.character.poison = Math.min(100, this.character.poison + 20);
+            this.poisonBar.setPercentage(this.character.poison);
+            return false;
+        });
     }
 
     draw() {
@@ -38,11 +76,15 @@ class World {
         this.ctx.translate(this.cameraX, 0);
         this.drawObjects(this.level.backgroundObjects);
         this.drawObjects(this.level.lights);
+        this.drawObjects(this.level.coins);
+        this.drawObjects(this.level.poisonBottles);
         this.drawObject(this.character);
         this.drawObjects(this.level.enemies);
         this.ctx.translate(-this.cameraX, 0);
 
-        this.drawObject(this.statusBar);
+        this.drawObject(this.lifeBar);
+        this.drawObject(this.coinBar);
+        this.drawObject(this.poisonBar);
 
         requestAnimationFrame(() => this.draw());
     }

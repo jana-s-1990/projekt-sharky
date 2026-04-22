@@ -20,6 +20,13 @@ class DrawableObject {
         });
     }
 
+    playAnimation(images) {
+        const i = this.currentImage % images.length;
+        const path = images[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+    }
+
     draw(ctx) {
         ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height);
     }

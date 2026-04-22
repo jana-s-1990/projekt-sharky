@@ -9,6 +9,7 @@ function init(){
 }
 
 window.addEventListener("keydown", (e) => {
+    keyboard.lastKeyPress = Date.now();
     if(e.key == "ArrowRight"){
         keyboard.RIGHT = true;
     }

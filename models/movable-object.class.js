@@ -22,13 +22,6 @@ class MovableObject extends DrawableObject {
             this.y + this.offset.top < object.y + object.height - object.offset.bottom;
     }
 
-    playAnimation(images) {
-        const i = this.currentImage % images.length;
-        const path = images[i];
-        this.img = this.imageCache[path];
-        this.currentImage++;
-    }
-
     startMovingLeft() {
         if (this.moveLeftInterval) {
             return;

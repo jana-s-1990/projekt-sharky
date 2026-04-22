@@ -30,6 +30,23 @@ class Character extends MovableObject {
             "img/1.Sharkie/1.IDLE/18.png",
     ];
 
+    IMAGES_LONG_IDLE = [
+            "img/1.Sharkie/2.Long_IDLE/i1.png",
+            "img/1.Sharkie/2.Long_IDLE/I2.png",   
+            "img/1.Sharkie/2.Long_IDLE/I3.png",
+            "img/1.Sharkie/2.Long_IDLE/I4.png",
+            "img/1.Sharkie/2.Long_IDLE/I5.png",
+            "img/1.Sharkie/2.Long_IDLE/I6.png",
+            "img/1.Sharkie/2.Long_IDLE/I7.png",
+            "img/1.Sharkie/2.Long_IDLE/I8.png",   
+            "img/1.Sharkie/2.Long_IDLE/I9.png",
+            "img/1.Sharkie/2.Long_IDLE/I10.png",
+            "img/1.Sharkie/2.Long_IDLE/I11.png",
+            "img/1.Sharkie/2.Long_IDLE/I12.png",
+            "img/1.Sharkie/2.Long_IDLE/I13.png",
+            "img/1.Sharkie/2.Long_IDLE/I14.png",   
+    ];
+
     IMAGES_SWIMMING = [
             "img/1.Sharkie/3.Swim/1.png",
             "img/1.Sharkie/3.Swim/2.png",
@@ -63,8 +80,10 @@ class Character extends MovableObject {
     ]
 
     world;
-    speed = 10;
+    speed = 5;
     tiltAngle = 0;
+    coins = 0;
+    poison = 0;
 
     offset = {
         top: 90,
@@ -74,8 +93,10 @@ class Character extends MovableObject {
     };
 
     constructor() {
-        super().loadImage("img/1.Sharkie/1.IDLE/1.png");
+        super();
+        this.loadImage(this.IMAGES_IDLE[0]);
         this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_LONG_IDLE);
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
@@ -133,21 +154,29 @@ class Character extends MovableObject {
         }
     }
 
-    updateAnimation() {
-        if (this.isMoving()) {
-            this.playAnimation(this.IMAGES_SWIMMING);
+    updateAnimation() { 
+        if (this.isDead()){
+            this.playAnimation(this.IMAGES_DEAD);
             return;
         }
         if (this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
             return;
-        }  
-        if (this.isDead()){
-            this.playAnimation(this.IMAGES_DEAD);
+        }
+        if (this.isMoving()) {
+            this.playAnimation(this.IMAGES_SWIMMING);
+            return;
+        }
+        if (this.isLongIdle()){
+            this.playAnimation(this.IMAGES_LONG_IDLE);
             return;
         }
 
         this.playAnimation(this.IMAGES_IDLE);
+    }
+
+    isLongIdle(){
+        return Date.now() - this.world.keyboard.lastKeyPress > 15000;
     }
 
     isMoving() {
