@@ -1,6 +1,6 @@
 class BackgroundObject extends DrawableObject {
     CANVAS_HEIGHT = 480;
-
+    
     x = 0;
     y = 0;
     width = 720;
