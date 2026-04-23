@@ -1,6 +1,6 @@
 class JellyFish extends Creature {
-    width = 100;
-    height = 100;
+  width = 100;
+  height = 100;
   offset = {
     top: 10,
     right: 10,
@@ -51,6 +51,6 @@ class JellyFish extends Creature {
   }
 
   canMoveDown() {
-     return this.y >= this.bottmLimit;
+    return this.y >= this.bottmLimit;
   }
 }
