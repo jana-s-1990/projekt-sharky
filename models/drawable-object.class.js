@@ -32,7 +32,7 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Fish) {
+        if (this instanceof Character || this instanceof Fish || this instanceof Coin || this instanceof Poison) {
             const hitboxX = -this.width / 2 + this.offset.left;
             const hitboxY = -this.height / 2 + this.offset.top;
             const hitboxWidth = this.width - this.offset.left - this.offset.right;

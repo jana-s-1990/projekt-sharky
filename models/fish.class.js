@@ -1,5 +1,5 @@
 class Fish extends MovableObject {
-    y = 310;
+    y = 210;
     IMAGES_SWIMMING = [
             "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim1.png",
             "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim2.png",

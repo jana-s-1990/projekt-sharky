@@ -37,6 +37,23 @@ const level1 = new Level(
         new BackgroundObject("img/3. Background/Layers/3.Fondo 1/D2.png", 480, 719 * 3),
         new BackgroundObject("img/3. Background/Layers/2. Floor/D2.png", 480, 719 * 3),
     ],
-    CollectableObject.createRandomCollectibles("coin", 10, 200, 1600, 80, 200),
-    CollectableObject.createRandomCollectibles("poison", 5, 250, 1600, 340, 400)
+    [
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+    ],
+    [
+        new Poison(),
+        new Poison(),
+        new Poison(),
+        new Poison(),
+        new Poison()
+    ]
 );
