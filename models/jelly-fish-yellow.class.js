@@ -1,0 +1,3 @@
+class JellyFishYellow extends JellyFish{
+    
+}

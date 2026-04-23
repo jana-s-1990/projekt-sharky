@@ -1,0 +1,3 @@
+class FishPink extends Fish{
+    
+}

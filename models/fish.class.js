@@ -1,4 +1,4 @@
-class Fish extends MovableObject {
+class Fish extends Creature {
     y = 210;
     IMAGES_SWIMMING = [
             "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim1.png",
@@ -25,7 +25,7 @@ class Fish extends MovableObject {
 
     startAnimation() {
         this.startMovingLeft();
-
+        
         setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING);
         }, 100);

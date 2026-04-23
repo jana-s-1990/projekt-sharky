@@ -1,4 +1,4 @@
-class Character extends MovableObject {
+class Character extends Creature {
     MOVEMENT_FRAME_TIME = 1000 / 60;
     ANIMATION_FRAME_TIME = 100;
     MAX_VERTICAL_SPEED = 5;
