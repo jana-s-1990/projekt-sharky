@@ -11,7 +11,7 @@ const level1 = new Level(
         new Light("img/3. Background/Layers/1. Light/1.png", 0, 500),
         new Light("img/3. Background/Layers/1. Light/2.png", 600, 1000),
         new Light("img/3. Background/Layers/1. Light/1.png", 1200, 1500),
-        new Light("img/3. Background/Layers/1. Light/2.png", 1700, 2800)
+        new Light("img/3. Background/Layers/1. Light/2.png", 1800, 2800)
     ],
     [
         new BackgroundObject("img/3. Background/Layers/5. Water/D2.png", 480, -719),
