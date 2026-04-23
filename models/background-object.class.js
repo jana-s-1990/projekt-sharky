@@ -7,7 +7,8 @@ class BackgroundObject extends DrawableObject {
     height = 480;
 
     constructor(imagePath, height, x) {
-        super().loadImage(imagePath);
+        super();
+        this.loadImage(imagePath);
         this.height = height;
         this.y = this.CANVAS_HEIGHT - this.height;
         this.x = x;

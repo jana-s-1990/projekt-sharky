@@ -101,7 +101,7 @@ class World {
             this.ctx.rotate(object.tiltAngle);
         }
         object.draw(this.ctx);
-        object.drawFrame(this.ctx);
+        //object.drawFrame(this.ctx);
         
         this.ctx.stroke();
         this.ctx.restore();

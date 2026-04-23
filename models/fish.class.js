@@ -1,13 +1,4 @@
 class Fish extends Creature {
-    y = 210;
-    IMAGES_SWIMMING = [
-            "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim1.png",
-            "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim2.png",
-            "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim3.png",
-            "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim4.png",
-            "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim5.png",
-    ];
-
     offset = {
         top: 5,
         right:5,
@@ -16,18 +7,16 @@ class Fish extends Creature {
     };
 
     constructor() {
-        super().loadImage("img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim1.png");
-        this.loadImages(this.IMAGES_SWIMMING);
-        this.x = 200 + Math.random() * 500;
+        super();
+        this.y = 150 + Math.random() * 150;
+        this.x = 200 + Math.random() * 1000;
         this.speed = 0.15 + Math.random() * 0.5;
-        this.startAnimation();
     }
 
-    startAnimation() {
+    startAnimation(images) {
         this.startMovingLeft();
-        
         setInterval(() => {
-            this.playAnimation(this.IMAGES_SWIMMING);
+            this.playAnimation(images);
         }, 100);
     }
 }

@@ -80,7 +80,7 @@ class Character extends Creature {
     ]
 
     world;
-    speed = 5;
+    speed = 3;
     tiltAngle = 0;
     coins = 0;
     poison = 0;
