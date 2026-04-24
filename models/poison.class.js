@@ -21,6 +21,7 @@ class Poison extends CollectableObject {
     constructor() {
         super();
         this.y = 350 + Math.random() * 30;
+        this.loadImage(this.POISON_IMAGES[0]);
         this.loadImages(this.POISON_IMAGES);
         this.startAnimation(this.POISON_IMAGES);
     }

@@ -32,10 +32,10 @@
     <script src="models/level.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="models/world.class.js"></script>
-    <script src="js/game.js"></script>
+    <script src="js/game.js" defer></script>
 
 </head>
-<body onload="init()">
+<body>
     <div class="bubble-background" aria-hidden="true">
         <span class="bg-bubble"></span>
         <span class="bg-bubble"></span>
@@ -51,7 +51,7 @@
 
     <canvas id="canvas" width="720" height="480"class="hidden"></canvas>
 
-    <div class="start-screen">
+    <div id="start-screen">
         <div class="start-screen-buttons">
             <button id="start-button"><img src="img/8.Startscreen/button-start-hai.png" alt="Start Game"></button>
             <button id="help-button"><img src="img/8.Startscreen/button-help.png" alt="Help"></button>
