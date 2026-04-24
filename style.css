@@ -5,6 +5,7 @@
 
 body{
     position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,22 +27,222 @@ body::before{
     background-size: cover;
     filter: blur(6px);
     transform: scale(1.05);
-    z-index: -1;
+    z-index: -2;
     
+}
+
+body::after{
+    content: "";
+    position: fixed;
+    inset: -6%;
+    background-image: url("img/3. Background/Layers/1. Light/COMPLETO.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.35;
+    animation: driftLight 10s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: -1;
 }
 
 h1, h2{
     letter-spacing: 3px;
+    text-align: center;
 }
 
 h1{
     font-size: 46px;    
 }
 
+.bubble-background{
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.bg-bubble{
+    position: absolute;
+    bottom: -120px;
+    width: 22px;
+    height: 22px;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset -4px -4px 8px rgba(255, 255, 255, 0.12);
+    animation: riseBubble 13s linear infinite;
+}
+
+.bg-bubble:nth-child(1){
+    left: 8%;
+    width: 18px;
+    height: 18px;
+    animation-duration: 11s;
+    animation-delay: -1s;
+}
+
+.bg-bubble:nth-child(2){
+    left: 18%;
+    width: 28px;
+    height: 28px;
+    animation-duration: 14s;
+    animation-delay: -5s;
+}
+
+.bg-bubble:nth-child(3){
+    left: 31%;
+    width: 14px;
+    height: 14px;
+    animation-duration: 10s;
+    animation-delay: -3s;
+}
+
+.bg-bubble:nth-child(4){
+    left: 48%;
+    width: 24px;
+    height: 24px;
+    animation-duration: 15s;
+    animation-delay: -8s;
+}
+
+.bg-bubble:nth-child(5){
+    left: 63%;
+    width: 16px;
+    height: 16px;
+    animation-duration: 12s;
+    animation-delay: -2s;
+}
+
+.bg-bubble:nth-child(6){
+    left: 76%;
+    width: 30px;
+    height: 30px;
+    animation-duration: 16s;
+    animation-delay: -10s;
+}
+
+.bg-bubble:nth-child(7){
+    left: 87%;
+    width: 20px;
+    height: 20px;
+    animation-duration: 11.5s;
+    animation-delay: -6s;
+}
+
+.bg-bubble:nth-child(8){
+    left: 93%;
+    width: 12px;
+    height: 12px;
+    animation-duration: 9.5s;
+    animation-delay: -4s;
+}
+
+h2{
+    animation: floatSubtitle 4.8s ease-in-out infinite;
+}
+
+@keyframes floatSubtitle{
+    0%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-4px);
+    }
+    100%{
+        transform: translateY(0);
+    }
+}
+
+@keyframes driftLight{
+    0%{
+        transform: translate3d(-18px, 0, 0) scale(1.02);
+    }
+    50%{
+        transform: translate3d(12px, -10px, 0) scale(1.06);
+    }
+    100%{
+        transform: translate3d(24px, 8px, 0) scale(1.03);
+    }
+}
+
+@keyframes riseBubble{
+    0%{
+        transform: translate3d(0, 0, 0) scale(0.9);
+        opacity: 0;
+    }
+    10%{
+        opacity: 0.65;
+    }
+    50%{
+        transform: translate3d(16px, -45vh, 0) scale(1);
+    }
+    100%{
+        transform: translate3d(-18px, -110vh, 0) scale(1.08);
+        opacity: 0;
+    }
+}
+
 canvas{
     background-color: black;
     filter: drop-shadow(-3px 6px 10px #063780);
 }
+
 .hidden{
     display: none;;
+}
+
+.start-screen-buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+button{
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    transition: transform 0.25s ease, filter 0.25s ease;
+}
+
+button img{
+    width: 200px;
+    height: auto;
+    display: block;
+    animation: floatButton 3.2s ease-in-out infinite;
+}
+
+button:first-child img{
+     width: 240px;
+}
+
+button:hover{
+    transform: scale(1.05);
+    filter: brightness(1.08) drop-shadow(0 0 14px rgba(123, 220, 255, 0.7));
+}
+
+button:hover img{
+    animation-duration: 2s;
+}
+
+#help-button img{
+    animation-delay: 0.4s;
+}
+
+#settings-button img{
+    animation-delay: 0.8s;
+}
+
+@keyframes floatButton{
+    0%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-10px);
+    }
+    100%{
+        transform: translateY(0);
+    }
 }

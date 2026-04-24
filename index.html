@@ -36,15 +36,27 @@
 
 </head>
 <body onload="init()">
+    <div class="bubble-background" aria-hidden="true">
+        <span class="bg-bubble"></span>
+        <span class="bg-bubble"></span>
+        <span class="bg-bubble"></span>
+        <span class="bg-bubble"></span>
+        <span class="bg-bubble"></span>
+        <span class="bg-bubble"></span>
+        <span class="bg-bubble"></span>
+        <span class="bg-bubble"></span>
+    </div>
+
     <h1>Welcome to Sharkie!</h1>
 
     <canvas id="canvas" width="720" height="480"class="hidden"></canvas>
 
     <div class="start-screen">
-        <button id="start-button">Start</button>
-        <button id="help-button">Help</button>
-        <button id="settings-button">Settings</button>
-
+        <div class="start-screen-buttons">
+            <button id="start-button"><img src="img/8.Startscreen/button-start-hai.png" alt="Start Game"></button>
+            <button id="help-button"><img src="img/8.Startscreen/button-help.png" alt="Help"></button>
+            <button id="settings-button"><img src="img/8.Startscreen/button-settings.png" alt="Settings"></button>
+        </div>
         <h2>Press Start to dive in</h2>
         
     </div>
