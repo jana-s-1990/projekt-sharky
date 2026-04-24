@@ -1,12 +1,40 @@
+@font-face {
+    font-family: "Luckiest Guy";
+    src: url("img/5.Font/Luckiest_Guy/LuckiestGuy-Regular.ttf");
+}
+
 body{
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    overflow: hidden;
+    font-family: "Luckiest Guy";
+    color: #fff;
+}
+
+body::before{
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("img/7.Game-background-img/ChatGPT Image 24. Apr. 2026, 14_28_50.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(6px);
+    transform: scale(1.05);
+    z-index: -1;
+}
+
+h1{
+    font-size: 46px;
+    letter-spacing: 3px;
 }
 
 canvas{
     background-color: black;
+    filter: drop-shadow(-3px 6px 10px #063780);
 }
