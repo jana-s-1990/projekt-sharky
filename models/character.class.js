@@ -1,13 +1,22 @@
 class Character extends Creature {
-    MOVEMENT_FRAME_TIME = 1000 / 60;
-    ANIMATION_FRAME_TIME = 100;
     MAX_VERTICAL_SPEED = 5;
     TILT_THRESHOLD = 0.2;
     TILT_ANGLE = 0.2;
-    CAMERA_OFFSET_X = 50;
 
     height = 180;
     width = 180;
+    world;
+    speed = 3;
+    tiltAngle = 0;
+    coins = 0;
+    poison = 0;
+
+    offset = {
+        top: 90,
+        right:35,
+        bottom: 40,
+        left: 35
+    };
 
     IMAGES_IDLE = [
             "img/1.Sharkie/1.IDLE/1.png",
@@ -79,19 +88,6 @@ class Character extends Creature {
             "img/1.Sharkie/5.Hurt/1.Poisoned/5.png",
     ]
 
-    world;
-    speed = 3;
-    tiltAngle = 0;
-    coins = 0;
-    poison = 0;
-
-    offset = {
-        top: 90,
-        right:35,
-        bottom: 40,
-        left: 35
-    };
-
     constructor() {
         super();
         this.loadImage(this.IMAGES_IDLE[0]);
@@ -105,11 +101,11 @@ class Character extends Creature {
     startAnimation() {
         setInterval(() => {
             this.updateMovement();
-        }, this.MOVEMENT_FRAME_TIME);
+        }, 1000 / 60);
 
         setInterval(() => {
             this.updateAnimation();
-        }, this.ANIMATION_FRAME_TIME);
+        }, 100);
     }
 
     updateMovement() {
@@ -197,6 +193,6 @@ class Character extends Creature {
     }
 
     updateCameraPosition() {
-        this.world.cameraX = -this.x + this.CAMERA_OFFSET_X;
+        this.world.cameraX = -this.x + 150;
     }
 }
