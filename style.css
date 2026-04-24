@@ -27,14 +27,21 @@ body::before{
     filter: blur(6px);
     transform: scale(1.05);
     z-index: -1;
+    
+}
+
+h1, h2{
+    letter-spacing: 3px;
 }
 
 h1{
-    font-size: 46px;
-    letter-spacing: 3px;
+    font-size: 46px;    
 }
 
 canvas{
     background-color: black;
     filter: drop-shadow(-3px 6px 10px #063780);
+}
+.hidden{
+    display: none;;
 }
