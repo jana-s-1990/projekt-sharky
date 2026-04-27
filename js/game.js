@@ -1,8 +1,10 @@
 let canvas;
 let world;
 let startbutton = document.getElementById("start-button");
-
+let startMusicButton = document.getElementById("play-music");
+let audioManager = new AudioManager();
 let keyboard = new Keyboard();
+let startgame = false;
 
 function init(){
     initLevel();
@@ -10,12 +12,43 @@ function init(){
     world = new World(canvas ,keyboard);
 }
 
-startbutton.addEventListener("click", () => {
+function toggleStartScreenMusic(){
+    if(startgame){
+        audioManager.toggleGameMusic();
+    } else {
+        audioManager.startScreenMusic();
+    }
+    updateMusicButtonIcon();
+}
+
+function updateMusicButtonIcon(){
+    if(audioManager.playSound){
+        startMusicButton.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+    } else {
+        startMusicButton.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    }
+}
+
+function startGame(){
+    let shouldPlayGameMusic = audioManager.playSound;
+
+    audioManager.startClickSound();
+    audioManager.stopStartScreenMusic();
+    startgame = true;
+    if(shouldPlayGameMusic){
+        audioManager.startGameMusic();
+    }
+
+    document.getElementById("bubble-bg-startscreen").style.display = "none";
     document.getElementById("start-screen").style.display = "none"; 
+    document.body.classList.add("no-light-animation");
     canvas = document.getElementById("canvas");
     canvas.style.display = "block";  
     init();
-});
+}
+
+startMusicButton.addEventListener("click", toggleStartScreenMusic);    
+startbutton.addEventListener("click", startGame);
 
 window.addEventListener("keydown", (e) => {
     keyboard.lastKeyPress = Date.now();

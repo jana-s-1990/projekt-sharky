@@ -6,7 +6,7 @@
     <title>Sharkie</title>
 
     <link rel="stylesheet" href="style.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/status-bar.class.js"></script>
@@ -29,6 +29,7 @@
     <script src="models/light.class.js"></script>
     <script src="models/background-object.class.js"></script>
     <script src="models/keyboard.class.js"></script>
+    <script src="models/audio-manager.class.js"></script>
     <script src="models/level.class.js"></script>
     <script src="levels/level1.js"></script>
     <script src="models/world.class.js"></script>
@@ -36,7 +37,7 @@
 
 </head>
 <body>
-    <div class="bubble-background" aria-hidden="true">
+    <div id="bubble-bg-startscreen" class="bubble-background" aria-hidden="true">
         <span class="bg-bubble"></span>
         <span class="bg-bubble"></span>
         <span class="bg-bubble"></span>
@@ -48,17 +49,16 @@
     </div>
 
     <h1>Welcome to Sharkie!</h1>
-
+    <button id="play-music" class="sound-button"><i class="fa-solid fa-volume-high"></i></button>
     <canvas id="canvas" width="720" height="480"class="hidden"></canvas>
 
     <div id="start-screen">
+        <h2>Press Start to dive in</h2>
         <div class="start-screen-buttons">
             <button id="start-button"><img src="img/8.Startscreen/button-start-hai.png" alt="Start Game"></button>
             <button id="help-button"><img src="img/8.Startscreen/button-help.png" alt="Help"></button>
             <button id="settings-button"><img src="img/8.Startscreen/button-settings.png" alt="Settings"></button>
         </div>
-        <h2>Press Start to dive in</h2>
-        
     </div>
 </body>
 </html>

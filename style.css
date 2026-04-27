@@ -45,6 +45,10 @@ body::after{
     z-index: -1;
 }
 
+body.no-light-animation::after {
+    animation: none;
+}
+
 h1, h2{
     letter-spacing: 3px;
     text-align: center;
@@ -245,4 +249,26 @@ button:hover img{
     100%{
         transform: translateY(0);
     }
+}
+
+.sound-button {
+  position: fixed;
+  top: 24px;
+  right: 20vw;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.8);
+  background: rgba(0, 80, 150, 0.35);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 18px rgba(80, 220, 255, 0.45);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.sound-button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 24px rgba(120, 240, 255, 0.8);
 }
