@@ -2,6 +2,7 @@ let canvas;
 let world;
 let startbutton = document.getElementById("start-button");
 let startMusicButton = document.getElementById("play-music");
+let effectsButton = document.getElementById("play-effects");
 let audioManager = new AudioManager();
 let keyboard = new Keyboard();
 let startgame = false;
@@ -9,7 +10,7 @@ let startgame = false;
 function init(){
     initLevel();
     canvas = document.getElementById("canvas");
-    world = new World(canvas ,keyboard);
+    world = new World(canvas, keyboard, audioManager);
 }
 
 function toggleStartScreenMusic(){
@@ -22,10 +23,23 @@ function toggleStartScreenMusic(){
 }
 
 function updateMusicButtonIcon(){
-    if(audioManager.playSound){
+    if(audioManager.isMusicMuted){
         startMusicButton.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
     } else {
         startMusicButton.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+    }
+}
+
+function toggleEffects(){
+    audioManager.toggleEffects();
+    updateEffectsButtonIcon();
+}
+
+function updateEffectsButtonIcon(){
+    if(audioManager.areEffectsMuted){
+        effectsButton.innerHTML = '<i class="fa-solid fa-wand-magic"></i>';
+    } else {
+        effectsButton.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i>';
     }
 }
 
@@ -42,12 +56,14 @@ function startGame(){
     document.getElementById("bubble-bg-startscreen").style.display = "none";
     document.getElementById("start-screen").style.display = "none"; 
     document.body.classList.add("no-light-animation");
+    effectsButton.classList.remove("hidden");
     canvas = document.getElementById("canvas");
     canvas.style.display = "block";  
     init();
 }
 
 startMusicButton.addEventListener("click", toggleStartScreenMusic);    
+effectsButton.addEventListener("click", toggleEffects);    
 startbutton.addEventListener("click", startGame);
 
 window.addEventListener("keydown", (e) => {

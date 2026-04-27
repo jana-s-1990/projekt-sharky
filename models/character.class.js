@@ -10,6 +10,8 @@ class Character extends Creature {
     tiltAngle = 0;
     coins = 0;
     poison = 0;
+    audioManager = new AudioManager();
+    deadSoundPlayed = false;
 
     offset = {
         top: 90,
@@ -153,18 +155,25 @@ class Character extends Creature {
     updateAnimation() { 
         if (this.isDead()){
             this.playAnimation(this.IMAGES_DEAD);
+            if(!this.deadSoundPlayed){
+                this.audioManager.playEffect(this.audioManager.deadSound, false);
+                this.deadSoundPlayed = true;
+            }
             return;
         }
         if (this.isHurt()) {
             this.playAnimation(this.IMAGES_HURT);
+            this.audioManager.playEffect(this.audioManager.hurtSound, false);
             return;
         }
         if (this.isMoving()) {
+            this.audioManager.playEffect(this.audioManager.swimSound, false);
             this.playAnimation(this.IMAGES_SWIMMING);
             return;
         }
         if (this.isLongIdle()){
             this.playAnimation(this.IMAGES_LONG_IDLE);
+            this.audioManager.playEffect(this.audioManager.snoozeSound, false);
             return;
         }
 

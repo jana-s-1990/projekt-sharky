@@ -5,14 +5,16 @@ class World {
     keyboard;
     ctx;
     cameraX = 0;
+    audioManager = new AudioManager();
     lifeBar = new LifeBar(10, 10, 180, 50, 100);
     coinBar = new CoinBar(10, 50, 180, 48, 0);
     poisonBar = new PoisonBar(10, 90, 180, 50, 0);
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, audioManager) {
         this.ctx = canvas.getContext("2d");
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.audioManager = audioManager || this.audioManager;
         this.setCharacterWorld();
         this.draw();
         this.run();
@@ -20,6 +22,7 @@ class World {
 
     setCharacterWorld() {
         this.character.world = this;
+        this.character.audioManager = this.audioManager;
         this.character.startAnimation();
     }
 
@@ -55,6 +58,7 @@ class World {
 
             this.character.coins = Math.min(100, this.character.coins + 10);
             this.coinBar.setPercentage(this.character.coins);
+            this.audioManager.playEffect(this.audioManager.coinSound);
             return false;
         });
     }
@@ -67,6 +71,7 @@ class World {
 
             this.character.poison = Math.min(100, this.character.poison + 20);
             this.poisonBar.setPercentage(this.character.poison);
+            this.audioManager.playEffect(this.audioManager.bottleSound);
             return false;
         });
     }
