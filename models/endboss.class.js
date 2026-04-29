@@ -36,4 +36,22 @@ class Endboss extends Creature {
       this.playAnimation(this.IMAGES_SWIMMING);
     }, 100);
   }
+
+  hitByFinSlap() {
+    this.energy -= 20;
+    if(this.energy < 0){
+      this.energy = 0;
+    } else {
+      this.lastHitTime = new Date().getTime();
+    }
+  }
+
+  hitByBubble(damage) {
+    this.energy -= damage;
+    if(this.energy < 0){
+      this.energy = 0;
+    } else {
+      this.lastHitTime = new Date().getTime();
+    }
+  }
 }

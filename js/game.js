@@ -13,6 +13,7 @@ function init(){
 }
 
 function toggleStartScreenMusic(){
+    startMusicButton.blur();
     if(startgame){
         audioManager.toggleGameSound();
     } else {
@@ -34,6 +35,7 @@ function updateSoundButtonIcon(){
 }
 
 function startGame(){
+    startbutton.blur();
     let shouldPlayGameMusic = !audioManager.isMusicMuted;
     audioManager.areEffectsMuted = audioManager.isMusicMuted;
 
@@ -57,6 +59,11 @@ startMusicButton.addEventListener("click", toggleStartScreenMusic);
 startbutton.addEventListener("click", startGame);
 
 window.addEventListener("keydown", (e) => {
+    if(isGameControlKey(e)){
+        e.preventDefault();
+        blurFocusedButton();
+    }
+
     keyboard.lastKeyPress = Date.now();
     if(e.key == "ArrowRight"){
         keyboard.RIGHT = true;
@@ -70,10 +77,24 @@ window.addEventListener("keydown", (e) => {
     if(e.key == "ArrowDown"){
         keyboard.DOWN = true;
     }
-    if(e.key == " "){
+    if(e.key == " " && !e.repeat){
         keyboard.SPACE = true;
     }
+    if(e.key.toLowerCase() == "d" && !e.repeat){
+        keyboard.D = true;
+    }
 })
+
+function isGameControlKey(e){
+    return ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown", " "].includes(e.key) ||
+        e.key.toLowerCase() == "d";
+}
+
+function blurFocusedButton(){
+    if(document.activeElement && document.activeElement.tagName == "BUTTON"){
+        document.activeElement.blur();
+    }
+}
 
 window.addEventListener("keyup", (e) => {
     if(e.key == "ArrowRight"){
@@ -90,5 +111,8 @@ window.addEventListener("keyup", (e) => {
     }
     if(e.key == " "){
         keyboard.SPACE = false;
+    }
+    if(e.key.toLowerCase() == "d"){
+        keyboard.D = false;
     }
 })

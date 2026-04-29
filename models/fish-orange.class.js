@@ -7,10 +7,17 @@ class FishOrange extends Fish {
     "img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/2.swim5.png",
   ];
 
+  IMAGES_DEAD = [
+    "img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.png",
+    "img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.2.png",
+    "img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.3.png",
+  ];
+
   constructor(){
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
     this.loadImages(this.IMAGES_SWIMMING);
+    this.loadImages(this.IMAGES_DEAD);
     this.startAnimation(this.IMAGES_SWIMMING);
   }
 }

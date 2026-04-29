@@ -6,6 +6,7 @@ class World {
     ctx;
     cameraX = 0;
     audioManager = new AudioManager();
+    bubbles = [];
     lifeBar = new LifeBar(10, 10, 180, 50, 100);
     coinBar = new CoinBar(10, 50, 180, 48, 0);
     poisonBar = new PoisonBar(10, 90, 180, 50, 0);
@@ -28,19 +29,116 @@ class World {
 
     run() {
         this.checkEnemyCollisions();
+        this.checkAttackCollisions();
+        this.checkBubbleShots();
+        this.checkBubbleCollisions();
         this.checkCollectibleCollisions();
     }
 
     checkEnemyCollisions(){
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
-                if(this.character.isColliding(enemy)){
+                if(!enemy.isDying && !enemy.removeFromWorld && this.character.isColliding(enemy)){
                     this.character.hit();
                     this.lifeBar.setPercentage(this.character.energy);
                 }
             });
             
         }, 100);
+    }
+
+    checkAttackCollisions(){
+        setInterval(() => {
+            if(!this.character.isAttacking){
+                this.removeDeadEnemies();
+                return;
+            }
+
+            this.level.enemies.forEach((enemy) => {
+                if(this.canBeHitByFinSlap(enemy)){
+                    enemy.lastFinSlapHitId = this.character.attackId;
+                    enemy.hitByFinSlap(this.character);
+                }
+            });
+
+            this.removeDeadEnemies();
+        }, 100);
+    }
+
+    canBeHitByFinSlap(enemy) {
+        return typeof enemy.hitByFinSlap === "function" &&
+            this.isHitByFinSlap(enemy) &&
+            enemy.lastFinSlapHitId !== this.character.attackId;
+    }
+
+    isHitByFinSlap(enemy) {
+        let attack = this.character.getFinSlapHitbox();
+
+        return attack.x + attack.width > enemy.x + enemy.offset.left &&
+            attack.y + attack.height > enemy.y + enemy.offset.top &&
+            attack.x < enemy.x + enemy.width - enemy.offset.right &&
+            attack.y < enemy.y + enemy.height - enemy.offset.bottom;
+    }
+
+    removeDeadEnemies() {
+        this.level.enemies = this.level.enemies.filter(enemy => !enemy.removeFromWorld);
+    }
+
+    checkBubbleShots() {
+        setInterval(() => {
+            if(this.keyboard.D){
+                this.shootBubble();
+                this.keyboard.D = false;
+            }
+        }, 1000 / 60);
+    }
+
+    shootBubble() {
+        if(!this.character.attackBubble()){
+            return;
+        }
+
+        let isPoisonBubble = this.character.poison >= 20;
+
+        if(isPoisonBubble){
+            this.character.poison -= 20;
+            this.poisonBar.setPercentage(this.character.poison);
+        }
+
+        setTimeout(() => {
+            this.bubbles.push(new Bubble(this.character, isPoisonBubble));
+        }, 250);
+    }
+
+    checkBubbleCollisions() {
+        setInterval(() => {
+            this.bubbles.forEach((bubble) => {
+                this.level.enemies.forEach((enemy) => {
+                    if(this.canBeHitByBubble(bubble, enemy)){
+                        enemy.hitByBubble(bubble.damage);
+                        bubble.removeFromWorld = true;
+                    }
+                });
+            });
+
+            this.removeUsedBubbles();
+            this.removeDeadEnemies();
+        }, 100);
+    }
+
+    canBeHitByBubble(bubble, enemy) {
+        return !bubble.removeFromWorld &&
+            !enemy.isDying &&
+            !enemy.removeFromWorld &&
+            typeof enemy.hitByBubble === "function" &&
+            bubble.isColliding(enemy);
+    }
+
+    removeUsedBubbles() {
+        this.bubbles = this.bubbles.filter((bubble) => {
+            let isOutOfLevel = bubble.x < 0 || bubble.x > this.level.levelEndX + this.canvas.width;
+            return !bubble.removeFromWorld && !isOutOfLevel;
+        });
     }
 
     checkCollectibleCollisions() {
@@ -84,6 +182,7 @@ class World {
         this.drawObjects(this.level.coins);
         this.drawObjects(this.level.poisonBottles);
         this.drawObject(this.character);
+        this.drawObjects(this.bubbles);
         this.drawObjects(this.level.enemies);
         this.ctx.translate(-this.cameraX, 0);
 

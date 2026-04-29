@@ -12,6 +12,11 @@ class Character extends Creature {
     poison = 0;
     audioManager = new AudioManager();
     deadSoundPlayed = false;
+    isAttacking = false;
+    isBubbleAttacking = false;
+    attackId = 0;
+    attackDuration = 600;
+    bubbleAttackDuration = 700;
 
     offset = {
         top: 90,
@@ -88,7 +93,26 @@ class Character extends Creature {
             "img/1.Sharkie/5.Hurt/1.Poisoned/3.png",
             "img/1.Sharkie/5.Hurt/1.Poisoned/4.png",
             "img/1.Sharkie/5.Hurt/1.Poisoned/5.png",
-    ]
+    ];
+
+    IMAGES_FIN_SLAP = [
+        "img/1.Sharkie/4.Attack/Fin slap/1.png",
+        "img/1.Sharkie/4.Attack/Fin slap/4.png",
+        "img/1.Sharkie/4.Attack/Fin slap/5.png",
+        "img/1.Sharkie/4.Attack/Fin slap/6.png",
+        "img/1.Sharkie/4.Attack/Fin slap/7.png",
+        "img/1.Sharkie/4.Attack/Fin slap/8.png"
+    ];
+
+    IMAGES_BUBBLE_ATTACK = [
+        "img/1.Sharkie/4.Attack/Bubble trap/Op2 (Without Bubbles)/1.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/Op2 (Without Bubbles)/2.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/Op2 (Without Bubbles)/3.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/Op2 (Without Bubbles)/4.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/Op2 (Without Bubbles)/5.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/Op2 (Without Bubbles)/6.png",
+        "img/1.Sharkie/4.Attack/Bubble trap/Op2 (Without Bubbles)/7.png",
+    ];
 
     constructor() {
         super();
@@ -98,6 +122,8 @@ class Character extends Creature {
         this.loadImages(this.IMAGES_SWIMMING);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_FIN_SLAP);
+        this.loadImages(this.IMAGES_BUBBLE_ATTACK);
     }
 
     startAnimation() {
@@ -113,6 +139,7 @@ class Character extends Creature {
     updateMovement() {
         this.handleHorizontalMovement();
         this.handleVerticalMovement();
+        this.handleAttack();
         this.updateTiltAngle();
         this.updateCameraPosition();
     }
@@ -152,6 +179,60 @@ class Character extends Creature {
         }
     }
 
+    handleAttack() {
+        if (this.world.keyboard.SPACE) {
+            this.attackFinSlap();
+            this.world.keyboard.SPACE = false;
+        }
+    }
+
+    attackFinSlap() {
+        if (this.isAttacking || this.isBubbleAttacking || this.isDead()) {
+            return;
+        }
+
+        this.isAttacking = true;
+        this.attackId++;
+        this.currentImage = 0;
+
+        setTimeout(() => {
+            this.isAttacking = false;
+        }, this.attackDuration);
+    }
+
+    attackBubble() {
+        if (this.isAttacking || this.isBubbleAttacking || this.isDead()) {
+            return false;
+        }
+
+        this.isBubbleAttacking = true;
+        this.currentImage = 0;
+
+        setTimeout(() => {
+            this.isBubbleAttacking = false;
+        }, this.bubbleAttackDuration);
+
+        return true;
+    }
+
+    getFinSlapHitbox() {
+        if (this.otherDirection) {
+            return {
+                x: this.x + 10,
+                y: this.y + 85,
+                width: 75,
+                height: 60
+            };
+        }
+
+        return {
+            x: this.x + this.width - 85,
+            y: this.y + 85,
+            width: 75,
+            height: 60
+        };
+    }
+
     updateAnimation() { 
         if (this.isDead()){
             this.playAnimation(this.IMAGES_DEAD);
@@ -159,6 +240,14 @@ class Character extends Creature {
                 this.audioManager.playEffect(this.audioManager.deadSound, false);
                 this.deadSoundPlayed = true;
             }
+            return;
+        }
+        if (this.isAttacking) {
+            this.playAnimation(this.IMAGES_FIN_SLAP);
+            return;
+        }
+        if (this.isBubbleAttacking) {
+            this.playAnimation(this.IMAGES_BUBBLE_ATTACK);
             return;
         }
         if (this.isHurt()) {

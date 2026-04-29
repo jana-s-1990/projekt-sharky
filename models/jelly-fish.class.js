@@ -10,6 +10,8 @@ class JellyFish extends Creature {
   movingUp = true;
   topLimit = 20;
   bottmLimit = 350;
+  isDying = false;
+  removeFromWorld = false;
 
   constructor() {
     super();
@@ -20,12 +22,47 @@ class JellyFish extends Creature {
 
   startAnimation(images) {
     setInterval(() => {
+      if (this.isDying) {
+        this.floatAwayDead();
+        return;
+      }
+
       this.startMoveingVertical();
     }, 1000 / 60);
 
     setInterval(() => {
+      if (this.isDying) {
+        this.playAnimation(this.IMAGES_DEAD);
+        return;
+      }
+
       this.playAnimation(images);
     }, 180);
+  }
+
+  hitByBubble(damage) {
+    if (this.isDying || this.removeFromWorld) {
+      return;
+    }
+
+    this.energy = 0;
+    this.startDying();
+  }
+
+  startDying() {
+    this.isDying = true;
+    this.currentImage = 0;
+    this.speed = 1.8;
+  }
+
+  floatAwayDead() {
+    this.y -= this.speed;
+    this.x += Math.sin(Date.now() / 150) * 0.8;
+    this.tiltAngle += 0.02;
+
+    if (this.y + this.height < 0) {
+      this.removeFromWorld = true;
+    }
   }
 
   startMoveingVertical() {
