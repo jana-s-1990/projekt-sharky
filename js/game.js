@@ -2,7 +2,6 @@ let canvas;
 let world;
 let startbutton = document.getElementById("start-button");
 let startMusicButton = document.getElementById("play-music");
-let effectsButton = document.getElementById("play-effects");
 let audioManager = new AudioManager();
 let keyboard = new Keyboard();
 let startgame = false;
@@ -15,36 +14,28 @@ function init(){
 
 function toggleStartScreenMusic(){
     if(startgame){
-        audioManager.toggleGameMusic();
+        audioManager.toggleGameSound();
     } else {
         audioManager.startScreenMusic();
     }
-    updateMusicButtonIcon();
+    updateSoundButtonIcon();
 }
 
-function updateMusicButtonIcon(){
-    if(audioManager.isMusicMuted){
+function updateSoundButtonIcon(){
+    let isSoundMuted = startgame
+        ? audioManager.isMusicMuted && audioManager.areEffectsMuted
+        : audioManager.isMusicMuted;
+
+    if(isSoundMuted){
         startMusicButton.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
     } else {
         startMusicButton.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
     }
 }
 
-function toggleEffects(){
-    audioManager.toggleEffects();
-    updateEffectsButtonIcon();
-}
-
-function updateEffectsButtonIcon(){
-    if(audioManager.areEffectsMuted){
-        effectsButton.innerHTML = '<i class="fa-solid fa-wand-magic"></i>';
-    } else {
-        effectsButton.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i>';
-    }
-}
-
 function startGame(){
-    let shouldPlayGameMusic = audioManager.playSound;
+    let shouldPlayGameMusic = !audioManager.isMusicMuted;
+    audioManager.areEffectsMuted = audioManager.isMusicMuted;
 
     audioManager.startClickSound();
     audioManager.stopStartScreenMusic();
@@ -56,14 +47,13 @@ function startGame(){
     document.getElementById("bubble-bg-startscreen").style.display = "none";
     document.getElementById("start-screen").style.display = "none"; 
     document.body.classList.add("no-light-animation");
-    effectsButton.classList.remove("hidden");
+    updateSoundButtonIcon();
     canvas = document.getElementById("canvas");
     canvas.style.display = "block";  
     init();
 }
 
 startMusicButton.addEventListener("click", toggleStartScreenMusic);    
-effectsButton.addEventListener("click", toggleEffects);    
 startbutton.addEventListener("click", startGame);
 
 window.addEventListener("keydown", (e) => {

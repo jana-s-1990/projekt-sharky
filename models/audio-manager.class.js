@@ -101,7 +101,7 @@ class AudioManager {
     }
 
     startGameMusic(){
-        this.gameMusic.volume = 0.15;
+        this.gameMusic.volume = 1;
         this.gameMusicBG.volume = 0.5;
         this.playMusicLoop(this.gameMusic);
         this.playMusicLoop(this.gameMusicBG);
@@ -118,6 +118,20 @@ class AudioManager {
             return;
         }
         this.isMusicMuted = false;
+        this.startGameMusic();
+    }
+
+    toggleGameSound(){
+        if(!this.isMusicMuted || !this.areEffectsMuted){
+            this.stopAllMusic();
+            this.stopAllEffects();
+            this.isMusicMuted = true;
+            this.areEffectsMuted = true;
+            this.playSound = false;
+            return;
+        }
+        this.isMusicMuted = false;
+        this.areEffectsMuted = false;
         this.startGameMusic();
     }
 

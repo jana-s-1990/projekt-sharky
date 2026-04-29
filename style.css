@@ -272,7 +272,3 @@ button:hover img{
   transform: scale(1.08);
   box-shadow: 0 0 24px rgba(120, 240, 255, 0.8);
 }
-
-.effect-button {
-  right: calc(20vw + 68px);
-}
