@@ -1,6 +1,7 @@
 class Fish extends Creature {
   isDying = false;
   removeFromWorld = false;
+  isAttackAnimating = false;
   flySpeedX = 0;
   flySpeedY = 0;
   flyRotation = 0;
@@ -32,6 +33,10 @@ class Fish extends Creature {
         this.playAnimation(this.IMAGES_DEAD);
         return;
       }
+      if (this.isAttackAnimating) {
+        this.playAnimation(this.IMAGES_ATTACK);
+        return;
+      }
 
       this.playAnimation(images);
     }, 100);
@@ -50,6 +55,19 @@ class Fish extends Creature {
     this.flySpeedY = -4;
     this.flyRotation = attackDirection * 0.08;
     this.currentImage = 0;
+  }
+
+  hitByBubble() {
+    if (this.isDying || this.removeFromWorld || this.isAttackAnimating) {
+      return;
+    }
+
+    this.isAttackAnimating = true;
+    this.currentImage = 0;
+
+    setTimeout(() => {
+      this.isAttackAnimating = false;
+    }, 900);
   }
 
   updateDeadMovement() {

@@ -37,6 +37,10 @@ class World {
 
     checkEnemyCollisions(){
         setInterval(() => {
+            if(this.character.isElectroHurt){
+                return;
+            }
+
             this.level.enemies.forEach((enemy) => {
                 if(!enemy.isDying && !enemy.removeFromWorld && this.character.isColliding(enemy)){
                     this.character.hit();
@@ -58,6 +62,7 @@ class World {
                 if(this.canBeHitByFinSlap(enemy)){
                     enemy.lastFinSlapHitId = this.character.attackId;
                     enemy.hitByFinSlap(this.character);
+                    this.lifeBar.setPercentage(this.character.energy);
                 }
             });
 

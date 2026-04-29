@@ -13,11 +13,19 @@ class JellyFishLila extends JellyFish {
     "img/2.Enemy/2 Jelly fish/Dead/Lila/L4.png",
   ];
 
-  constructor(){
+  IMAGES_ATTACK = [
+    "img/2.Enemy/2 Jelly fish/S\u00faper dangerous/Pink 1.png",
+    "img/2.Enemy/2 Jelly fish/S\u00faper dangerous/Pink 2.png",
+    "img/2.Enemy/2 Jelly fish/S\u00faper dangerous/Pink 3.png",
+    "img/2.Enemy/2 Jelly fish/S\u00faper dangerous/Pink 4.png",
+  ];
+
+  constructor() {
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
     this.loadImages(this.IMAGES_SWIMMING);
     this.loadImages(this.IMAGES_DEAD);
+    this.loadImages(this.IMAGES_ATTACK);
     this.startAnimation(this.IMAGES_SWIMMING);
   }
 }

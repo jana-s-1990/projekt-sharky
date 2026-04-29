@@ -14,9 +14,11 @@ class Character extends Creature {
     deadSoundPlayed = false;
     isAttacking = false;
     isBubbleAttacking = false;
+    isElectroHurt = false;
     attackId = 0;
     attackDuration = 600;
     bubbleAttackDuration = 700;
+    electroHurtDuration = 700;
 
     offset = {
         top: 90,
@@ -114,6 +116,12 @@ class Character extends Creature {
         "img/1.Sharkie/4.Attack/Bubble trap/Op2 (Without Bubbles)/7.png",
     ];
 
+    IMAGES_HURT_ELECTRO = [
+        "img/1.Sharkie/5.Hurt/2.Electric shock/1.png",
+        "img/1.Sharkie/5.Hurt/2.Electric shock/2.png",
+        "img/1.Sharkie/5.Hurt/2.Electric shock/3.png",
+    ];
+
     constructor() {
         super();
         this.loadImage(this.IMAGES_IDLE[0]);
@@ -123,6 +131,7 @@ class Character extends Creature {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_FIN_SLAP);
+        this.loadImages(this.IMAGES_HURT_ELECTRO);
         this.loadImages(this.IMAGES_BUBBLE_ATTACK);
     }
 
@@ -215,6 +224,25 @@ class Character extends Creature {
         return true;
     }
 
+    hitElectro() {
+        if (this.isDead()) {
+            return;
+        }
+
+        this.energy -= 5;
+        if (this.energy < 0) {
+            this.energy = 0;
+        }
+        this.isAttacking = false;
+        this.isBubbleAttacking = false;
+        this.isElectroHurt = true;
+        this.currentImage = 0;
+
+        setTimeout(() => {
+            this.isElectroHurt = false;
+        }, this.electroHurtDuration);
+    }
+
     getFinSlapHitbox() {
         if (this.otherDirection) {
             return {
@@ -248,6 +276,11 @@ class Character extends Creature {
         }
         if (this.isBubbleAttacking) {
             this.playAnimation(this.IMAGES_BUBBLE_ATTACK);
+            return;
+        }
+        if (this.isElectroHurt) {
+            this.playAnimation(this.IMAGES_HURT_ELECTRO);
+            this.audioManager.playEffect(this.audioManager.hurtSound, false);
             return;
         }
         if (this.isHurt()) {
