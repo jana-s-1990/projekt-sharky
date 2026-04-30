@@ -203,6 +203,7 @@ class Character extends Creature {
         this.isAttacking = true;
         this.attackId++;
         this.currentImage = 0;
+        this.audioManager.playEffect(this.audioManager.attackFlosseSound);
 
         setTimeout(() => {
             this.isAttacking = false;
@@ -216,6 +217,7 @@ class Character extends Creature {
 
         this.isBubbleAttacking = true;
         this.currentImage = 0;
+        this.audioManager.playEffect(this.audioManager.attackBubbleSound);
 
         setTimeout(() => {
             this.isBubbleAttacking = false;

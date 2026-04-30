@@ -1,9 +1,6 @@
 class AudioManager {
     startGameSound = new Audio("img/9.Sounds/start_screen/startSound.mp3");
-    //startGameBGSound = new Audio("img/9.Sounds/start_screen/dragon-studio-underwater-ambience-376890.mp3");
     startGameButtonSound = new Audio("img/9.Sounds/start_screen/clickEffect.mp3");
-    //startGameButtonBGSound = new Audio("img/9.Sounds/start_screen/dragon-studio-water-splash-effect-443133.mp3");
-    //gameMusicBG = new Audio("img/9.Sounds/game/dragon-studio-deep-sea-underwater-ambience-482888.mp3");
     gameMusic = new Audio("img/9.Sounds/game/gameSound.mp3");
     coinSound = new Audio("img/9.Sounds/game/coin/coin.mp3");
     bottleSound = new Audio("img/9.Sounds/game/poison/bottle.mp3");
@@ -11,6 +8,8 @@ class AudioManager {
     swimSound = new Audio("img/9.Sounds/game/swim/swim.mp3");
     hurtSound = new Audio("img/9.Sounds/game/hurt/hurt.mp3");
     deadSound = new Audio("img/9.Sounds/game/dead/dead.mp3");
+    attackFlosseSound = new Audio("img/9.Sounds/game/attack/attack_hiaflosse.mp3");
+    attackBubbleSound = new Audio("img/9.Sounds/game/attack/attack-bubbels.mp3");
 
     playSound = false;
     isMusicMuted = false;
@@ -64,7 +63,9 @@ class AudioManager {
             this.snoozeSound,
             this.swimSound,
             this.hurtSound,
-            this.deadSound
+            this.deadSound,
+            this.attackFlosseSound,
+            this.attackBubbleSound
         ].forEach(sound => this.stopMusic(sound));
 
         this.activeEffects.forEach(effect => this.stopMusic(effect));
