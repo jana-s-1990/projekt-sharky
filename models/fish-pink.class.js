@@ -19,10 +19,6 @@ class FishPink extends Fish {
     "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition3.png",
     "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition4.png",
     "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition5.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition4.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition3.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition2.png",
-    "img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition1.png",
   ];
   
   constructor(){

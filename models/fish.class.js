@@ -5,6 +5,7 @@ class Fish extends Creature {
   flySpeedX = 0;
   flySpeedY = 0;
   flyRotation = 0;
+  attackAnimationTimeout;
 
   offset = {
     top: 5,
@@ -34,7 +35,7 @@ class Fish extends Creature {
         return;
       }
       if (this.isAttackAnimating) {
-        this.playAnimation(this.IMAGES_ATTACK);
+        this.playBubbleThreatAnimation();
         return;
       }
 
@@ -58,6 +59,10 @@ class Fish extends Creature {
   }
 
   hitByBubble() {
+    this.reactToBubbleThreat();
+  }
+
+  reactToBubbleThreat() {
     if (this.isDying || this.removeFromWorld || this.isAttackAnimating) {
       return;
     }
@@ -65,9 +70,21 @@ class Fish extends Creature {
     this.isAttackAnimating = true;
     this.currentImage = 0;
 
-    setTimeout(() => {
+    this.attackAnimationTimeout = setTimeout(() => {
       this.isAttackAnimating = false;
-    }, 900);
+    }, 2000);
+  }
+
+  playBubbleThreatAnimation() {
+    const lastImageIndex = this.IMAGES_ATTACK.length - 1;
+    const imageIndex = Math.min(this.currentImage, lastImageIndex);
+    const path = this.IMAGES_ATTACK[imageIndex];
+
+    this.img = this.imageCache[path];
+
+    if (this.currentImage < lastImageIndex) {
+      this.currentImage++;
+    }
   }
 
   updateDeadMovement() {

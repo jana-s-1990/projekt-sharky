@@ -118,10 +118,16 @@ class World {
     checkBubbleCollisions() {
         setInterval(() => {
             this.bubbles.forEach((bubble) => {
+                const threatenedFish = this.getThreatenedFish(bubble);
+
+                if(threatenedFish){
+                    threatenedFish.reactToBubbleThreat();
+                }
+
                 this.level.enemies.forEach((enemy) => {
                     if(this.canBeHitByBubble(bubble, enemy)){
                         enemy.hitByBubble(bubble.damage);
-                        bubble.removeFromWorld = true;
+                        bubble.burst();
                     }
                 });
             });
@@ -133,10 +139,50 @@ class World {
 
     canBeHitByBubble(bubble, enemy) {
         return !bubble.removeFromWorld &&
+            !bubble.isBursting &&
             !enemy.isDying &&
             !enemy.removeFromWorld &&
             typeof enemy.hitByBubble === "function" &&
             bubble.isColliding(enemy);
+    }
+
+    getThreatenedFish(bubble) {
+        return this.level.enemies
+            .filter(enemy => this.canReactToApproachingBubble(bubble, enemy))
+            .sort((a, b) => this.getHorizontalDistanceToBubble(bubble, a) - this.getHorizontalDistanceToBubble(bubble, b))[0];
+    }
+
+    canReactToApproachingBubble(bubble, fish) {
+        return fish instanceof Fish &&
+            !bubble.removeFromWorld &&
+            !bubble.isBursting &&
+            !fish.isDying &&
+            !fish.removeFromWorld &&
+            typeof fish.reactToBubbleThreat === "function" &&
+            this.isBubbleApproachingEnemy(bubble, fish);
+    }
+
+    isBubbleApproachingEnemy(bubble, enemy) {
+        const bubbleCenterX = bubble.x + bubble.width / 2;
+        const bubbleCenterY = bubble.y + bubble.height / 2;
+        const enemyCenterX = enemy.x + enemy.width / 2;
+        const enemyCenterY = enemy.y + enemy.height / 2;
+        const horizontalDistance = Math.abs(enemyCenterX - bubbleCenterX);
+        const verticalDistance = Math.abs(enemyCenterY - bubbleCenterY);
+        const bubbleMovesTowardEnemy = bubble.otherDirection
+            ? enemyCenterX < bubbleCenterX
+            : enemyCenterX > bubbleCenterX;
+
+        return bubbleMovesTowardEnemy &&
+            horizontalDistance < 650 &&
+            verticalDistance < 120;
+    }
+
+    getHorizontalDistanceToBubble(bubble, enemy) {
+        const bubbleCenterX = bubble.x + bubble.width / 2;
+        const enemyCenterX = enemy.x + enemy.width / 2;
+
+        return Math.abs(enemyCenterX - bubbleCenterX);
     }
 
     removeUsedBubbles() {
@@ -181,8 +227,9 @@ class World {
 
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.drawParallaxObjects(this.level.backgroundObjects);
+
         this.ctx.translate(this.cameraX, 0);
-        this.drawObjects(this.level.backgroundObjects);
         this.drawObjects(this.level.lights);
         this.drawObjects(this.level.coins);
         this.drawObjects(this.level.poisonBottles);
@@ -196,6 +243,17 @@ class World {
         this.drawObject(this.poisonBar);
 
         requestAnimationFrame(() => this.draw());
+    }
+
+    drawParallaxObjects(objects) {
+        const objectsByDepth = [...objects].sort((a, b) => a.parallaxFactor - b.parallaxFactor);
+
+        objectsByDepth.forEach(object => {
+            this.ctx.save();
+            this.ctx.translate(this.cameraX * object.parallaxFactor, 0);
+            this.drawObject(object);
+            this.ctx.restore();
+        });
     }
 
     drawObject(object) {
